@@ -6,7 +6,7 @@
 /*   By: nefimov <nefimov@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/13 20:10:00 by nefimov           #+#    #+#             */
-/*   Updated: 2026/10/15 12:08:12 by nefimov          ###   ########.fr       */
+/*   Updated: 2026/10/15 12:24:26 by nefimov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int main(void)
 {
 	std::cout << "=== Array test suite ===" << std::endl;
 	std::cout << std::endl;
+
+	// Test 1: default and sized construction, including value initialization.
 	std::cout << "Construction and size" << std::endl;
 	Array<int> empty;
 	if (check(empty.size() == 0, "empty array has size zero"))
@@ -46,6 +48,7 @@ int main(void)
 	std::cout << "  numbers = [" << numbers[0] << ", " << numbers[1] << ", "
 			  << numbers[2] << "]" << std::endl;
 
+	// Test 2: copy construction creates an independent deep copy.
 	std::cout << std::endl
 			  << "Copy construction" << std::endl;
 	numbers[0] = 10;
@@ -62,6 +65,7 @@ int main(void)
 	if (check(copied[0] == 10, "copy constructor performs a deep copy"))
 		return 1;
 
+	// Test 3: assignment copies values and handles self-assignment safely.
 	std::cout << std::endl
 			  << "Assignment and self-assignment" << std::endl;
 	Array<int> assigned;
@@ -76,10 +80,12 @@ int main(void)
 	if (check(assigned.size() == 3 && assigned[1] == 20,
 			  "assignment performs a deep copy"))
 		return 1;
-	assigned = assigned;
+	Array<int> *point = &assigned;
+	assigned = *point;
 	if (check(assigned[0] == 100, "self-assignment preserves the array"))
 		return 1;
 
+	// Test 4: const access and arrays containing non-fundamental types.
 	std::cout << std::endl
 			  << "Const and non-fundamental access" << std::endl;
 	const Array<int> readOnly(numbers);
@@ -96,8 +102,11 @@ int main(void)
 			  "arrays support non-fundamental types"))
 		return 1;
 
+	// Test 5: invalid indices throw the expected exception.
 	std::cout << std::endl
 			  << "Bounds checking" << std::endl;
+
+	// Test 5a: accessing an empty array.
 	bool threw = false;
 	try
 	{
@@ -111,6 +120,7 @@ int main(void)
 	if (check(threw, "out-of-bounds access throws std::exception"))
 		return 1;
 
+	// Test 5b: accessing the first index past the end.
 	threw = false;
 	try
 	{
